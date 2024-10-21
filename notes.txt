@@ -1,0 +1,9 @@
+users should be able to see products, categories and vendor on the adverts page
+users seeing other products from a particular vendor
+ref: user
+
+http://localhost:3002/products?filter={"productName":{"$regex":"ope", "$options":"i"}}
+
+filter: {"productName":{"$regex":"ope", "$options":"i"}}
+
+frontend to include sort and filter

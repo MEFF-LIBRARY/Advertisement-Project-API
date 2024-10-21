@@ -20,7 +20,7 @@ export const postProduct = async (req, res, next) => {
         res.status(201).json(`Product: ${products.productName} has been added successfully`)
 
     } catch (error) {
-
+        next(error)
     }
 }
 
