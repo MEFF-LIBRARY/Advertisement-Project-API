@@ -17,14 +17,14 @@ export const hasPermission = (action) => {
             // Use the user role to find their permission
             const permission = permissions.find(value => value.role === user.role);
             if (!permission) {
-                return res.status(403).json('No permission found!')
+                return res.status(403).json('No permission found!') //I think we should redefine the error message, for clarity
             }
 
             // Check if permission actions include action
             if (permission.actions.includes(action)) {
                 next();
             } else {
-                res.status(403).json('Action not allowed!');
+                res.status(403).json('Action not allowed!');  //I think we should redefine the error message, for clarity
             }
         } catch (error) {
             next(error);
