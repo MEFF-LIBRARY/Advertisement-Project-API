@@ -14,7 +14,8 @@ export const permissions = [
             'update_profile',
             'add_product',
             'update_product',
-            'get_product'
+            'get_product',
+            'delete_product'
         ]
     },
     {
@@ -40,4 +41,5 @@ export const permissions = [
             'delete_product'
         ]
     }
+
 ]
