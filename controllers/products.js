@@ -63,12 +63,8 @@ export const getProducts = async (req, res, next) => {
 export const getProduct = async (req, res, next) => {
     try {
 
-        const { filter = "{}", sort = "{}"} = req.query
-
-        // user can seach by keyword. Yet to figure out how user can find by category.
         const product = await productModel
-        .findById(JSON.parse(filter))
-        .sort(JSON.parse(sort))
+        .findById(req.params.id)
         .populate('user', '-password -_id')
         res.json(product);
 
