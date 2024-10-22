@@ -48,10 +48,10 @@ export const postProduct = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
     try {
 
-        const { filter = "{}" } = req.query
+        const { filter = "{}", sort = "{}"} = req.query
 
         // user can seach by keyword. Yet to figure out how user can find by category.
-        const product = await productModel.find(JSON.parse(filter))
+        const product = await productModel.find(JSON.parse(filter)).sort(JSON.parse(sort))
         res.json(product);
 
     } catch (error) {
