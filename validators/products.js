@@ -5,7 +5,7 @@ description: Joi.string(),
 category: Joi.string(),
 images: Joi.string().required(), //issue uploading when i make image required
 price: Joi.number().required(),
-newPrice: Joi.number(),
+discountPrice: Joi.number(),
 discountPercentage: Joi.number()
 });
 
@@ -15,6 +15,6 @@ description: Joi.string(),
 categoryId: Joi.object(),
 images: Joi.string(),
 price: Joi.number(),
-newPrice: Joi.number(),
+discountPrice: Joi.number(),
 discountPercentage: Joi.number()
 });

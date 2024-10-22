@@ -12,7 +12,7 @@ export const productSchema = new Schema({
    images: { type: String, required: true }, //issue uploading when i make image required
    price: { type: Number, required: true },
    discountPercentage: {type: Number, default: 0},
-   newPrice: {type: Number},
+   discountPrice: {type: Number},
    user: {type: Types.ObjectId, required: true, ref: 'User'}
 },
    {
