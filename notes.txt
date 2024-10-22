@@ -7,3 +7,15 @@ http://localhost:3002/products?filter={"productName":{"$regex":"ope", "$options"
 filter: {"productName":{"$regex":"ope", "$options":"i"}}
 
 frontend to include sort and filter
+
+work on extra logic. claculate new price: done
+
+1.implement sorting and count: done
+2. filtering has been done(but can users filter by price, and other parameters?)
+
+
+3. if user buys product from a particular category, suggest other similar products
+
+4. test sort and count
+
+read on the differnt types of request: req.body, req.query
