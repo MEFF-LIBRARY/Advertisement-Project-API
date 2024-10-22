@@ -16,25 +16,23 @@ export const postProduct = async (req, res, next) => {
         }
 
         // if both are provided, we return a message
-        if (value.newPrice && value.discountPercentage) {
+        if (value.discountPrice && value.discountPercentage) {
             return res.status(400).json({ message: 'Please provide either discount or discounted price, not both' });
         }
 
         // if discount price is provided but discount percentage is not provided, calculate discount percentage instead
-        if (value.newPrice && !value.discountPercentage) {
-            value.discountPercentage = ((value.price - value.newPrice) / value.price) * 100;
+        if (value.discountPrice && !value.discountPercentage) {
+            value.discountPercentage = ((value.price - value.discountPrice) / value.price) * 100;
         }
 
         // if discount percentage is provided but discount price is not provided, calculate discount instead
-        if (!value.newPrice && value.discountPercentage) {
-            value.newPrice = value.price - (value.price * (value.discountPercentage / 100));
+        if (!value.discountPrice && value.discountPercentage) {
+            value.discountPrice = value.price - (value.price * (value.discountPercentage / 100));
         }
         // if none is provided, maintain price 
-        if (!value.newPrice && !value.discountPercentage) {
-            value.newPrice = undefined;  
-        }
-
-        // nb: only discount percentage and discount price get modified, price is not modified
+        if (!value.discountPrice && !value.discountPercentage) {
+            value.discountPrice = undefined;  
+        }        // nb: only discount percentage and discount price get modified, price is not modified
 
 
         const products = await productModel.create({ ...value, user: req.auth.id })  //assign id to vendor upon request so we know who posted the ad
@@ -75,22 +73,22 @@ export const updateProducts = async (req, res, next) => {
         }
 
          // if both are provided, we return a message
-         if (value.newPrice && value.discountPercentage) {
+         if (value.discountPrice && value.discountPercentage) {
             return res.status(400).json({ message: 'Please provide either discount or discounted price, not both' });
         }
 
         // if discount price is provided but discount percentage is not provided, calculate discount percentage instead
-        if (value.newPrice && !value.discountPercentage) {
-            value.discountPercentage = ((value.price - value.newPrice) / value.price) * 100;
+        if (value.discountPrice && !value.discountPercentage) {
+            value.discountPercentage = ((value.price - value.discountPrice) / value.price) * 100;
         }
 
         // if discount percentage is provided but discount price is not provided, calculate discount instead
-        if (!value.newPrice && value.discountPercentage) {
-            value.newPrice = value.price - (value.price * (value.discountPercentage / 100));
+        if (!value.discountPrice && value.discountPercentage) {
+            value.discountPrice = value.price - (value.price * (value.discountPercentage / 100));
         }
-        // if none is provided, maintain price 
-        if (!value.newPrice && !value.discountPercentage) {
-            value.newPrice = undefined;  
+        // if none is provided, it means there's no discount so maintain price 
+        if (!value.discountPrice && !value.discountPercentage) {
+            value.discountPrice = undefined;  
         }
 
         const products = await productModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
