@@ -100,7 +100,7 @@ export const userProfileUpdate = async (req, res, next) => {
     try {
         // validate user input
         const { error, value } = updateUserValidator.validate({
-            ...value,
+            ...req.body,
             avatar: req.file?.filename
         });
         if (error) {
