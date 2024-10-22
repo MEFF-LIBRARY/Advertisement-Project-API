@@ -16,28 +16,28 @@ export const postProduct = async (req, res, next) => {
         }
 
         // if both are provided, we return a message
-        if (value.discountedPrice && value.discountPercentage) {
+        if (value.newPrice && value.discountPercentage) {
             return res.status(400).json({ message: 'Please provide either discount or discounted price, not both' });
         }
 
         // if discount price is provided but discount percentage is not provided, calculate discount percentage instead
-        if (value.discountedPrice && !value.discountPercentage) {
-            value.discountPercentage = ((value.price - value.discountedPrice) / value.price) * 100;
+        if (value.newPrice && !value.discountPercentage) {
+            value.discountPercentage = ((value.price - value.newPrice) / value.price) * 100;
         }
 
         // if discount percentage is provided but discount price is not provided, calculate discount instead
-        if (!value.discountedPrice && value.discountPercentage) {
-            value.discountedPrice = value.price - (value.price * (value.discountPercentage / 100));
+        if (!value.newPrice && value.discountPercentage) {
+            value.newPrice = value.price - (value.price * (value.discountPercentage / 100));
         }
         // if none is provided, maintain price 
-        if (!value.discountedPrice && !value.discountPercentage) {
-            value.discountedPrice = undefined;  
+        if (!value.newPrice && !value.discountPercentage) {
+            value.newPrice = undefined;  
         }
 
         // nb: only discount percentage and discount price get modified, price is not modified
 
 
-        const products = await productModel.create(value)
+        const products = await productModel.create({ ...value, user: req.auth.id })  //assign id to vendor upon request so we know who posted the ad
         res.status(201).json(`Product: ${products.productName} has been added successfully`)
 
     } catch (error) {
@@ -51,7 +51,10 @@ export const getProducts = async (req, res, next) => {
         const { filter = "{}", sort = "{}"} = req.query
 
         // user can seach by keyword. Yet to figure out how user can find by category.
-        const product = await productModel.find(JSON.parse(filter)).sort(JSON.parse(sort))
+        const product = await productModel
+        .find(JSON.parse(filter))
+        .sort(JSON.parse(sort))
+        .populate('user', '-password -_id')
         res.json(product);
 
     } catch (error) {
@@ -72,22 +75,22 @@ export const updateProducts = async (req, res, next) => {
         }
 
          // if both are provided, we return a message
-         if (value.discountedPrice && value.discountPercentage) {
+         if (value.newPrice && value.discountPercentage) {
             return res.status(400).json({ message: 'Please provide either discount or discounted price, not both' });
         }
 
         // if discount price is provided but discount percentage is not provided, calculate discount percentage instead
-        if (value.discountedPrice && !value.discountPercentage) {
-            value.discountPercentage = ((value.price - value.discountedPrice) / value.price) * 100;
+        if (value.newPrice && !value.discountPercentage) {
+            value.discountPercentage = ((value.price - value.newPrice) / value.price) * 100;
         }
 
         // if discount percentage is provided but discount price is not provided, calculate discount instead
-        if (!value.discountedPrice && value.discountPercentage) {
-            value.discountedPrice = value.price - (value.price * (value.discountPercentage / 100));
+        if (!value.newPrice && value.discountPercentage) {
+            value.newPrice = value.price - (value.price * (value.discountPercentage / 100));
         }
         // if none is provided, maintain price 
-        if (!value.discountedPrice && !value.discountPercentage) {
-            value.discountedPrice = undefined;  
+        if (!value.newPrice && !value.discountPercentage) {
+            value.newPrice = undefined;  
         }
 
         const products = await productModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
