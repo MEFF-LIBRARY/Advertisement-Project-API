@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserProfile, loginUser, logoutUser, registerUser, userProfileUpdate } from "../controllers/user.js";
+import { getUserAdverts, getUserProfile, loginUser, logoutUser, registerUser, userProfileUpdate } from "../controllers/user.js";
 import { hasPermission, isAuthenticated } from "../middlewares/auth.js";
 import { userAvatarUpload } from "../middlewares/upload.js";
 
@@ -10,6 +10,8 @@ userRouter.post('/users/register', registerUser);
 userRouter.post('/users/login', loginUser);
 
 userRouter.get('/users/me', isAuthenticated, hasPermission('get_profile'), getUserProfile);
+
+userRouter.get('/users/me/adverts',isAuthenticated, getUserAdverts)
 
 userRouter.post('/users/logout', isAuthenticated, logoutUser)
 
