@@ -1,4 +1,5 @@
 import { UserModel } from "../models/user.js";
+import { productModel } from "../models/product.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { loginUserValidator, registerUserValidator, updateUserValidator } from "../validators/user.js";
@@ -94,7 +95,26 @@ export const getUserProfile = async (req, res, next) => {
     }
 }
 
+//
+export const getUserAdverts = async (req, res, next) => {
+    try {
+        const { filter = "{}", sort = "{}", limit = 15, skip = 0 } = req.query
 
+        // user can seach by keyword. Yet to figure out how user can find by category.
+        const product = await productModel
+        .find({
+            ...JSON.parse(filter),
+            user: req.auth.id
+        })
+        .sort(JSON.parse(sort))
+        .limit(limit)
+        .skip(skip);
+
+        res.json(product);
+    } catch (error) {
+        next(error);
+    }
+}
 // Update Users
 export const userProfileUpdate = async (req, res, next) => {
     try {
