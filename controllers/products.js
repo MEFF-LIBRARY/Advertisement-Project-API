@@ -31,7 +31,7 @@ export const postProduct = async (req, res, next) => {
         }
         // if none is provided, maintain price 
         if (!value.discountPrice && !value.discountPercentage) {
-            value.discountPrice = undefined;  
+            value.discountPrice = undefined;
         }        // nb: only discount percentage and discount price get modified, price is not modified
 
 
@@ -46,13 +46,13 @@ export const postProduct = async (req, res, next) => {
 export const getProducts = async (req, res, next) => {
     try {
 
-        const { filter = "{}", sort = "{}"} = req.query
+        const { filter = "{}", sort = "{}" } = req.query
 
         // user can seach by keyword. Yet to figure out how user can find by category.
         const product = await productModel
-        .find(JSON.parse(filter))
-        .sort(JSON.parse(sort))
-        .populate('user', '-password -_id')
+            .find(JSON.parse(filter))
+            .sort(JSON.parse(sort))
+            .populate('user', '-password -_id')
         res.json(product);
 
     } catch (error) {
@@ -62,14 +62,10 @@ export const getProducts = async (req, res, next) => {
 
 export const getProduct = async (req, res, next) => {
     try {
-
-        const { filter = "{}", sort = "{}"} = req.query
-
         // user can seach by keyword. Yet to figure out how user can find by category.
         const product = await productModel
-        .findById(JSON.parse(filter))
-        .sort(JSON.parse(sort))
-        .populate('user', '-password -_id')
+            .findById(req.params.id)
+            .populate('user', '-password -_id')
         res.json(product);
 
     } catch (error) {
@@ -89,8 +85,8 @@ export const updateProducts = async (req, res, next) => {
             return res.status(422).json({ message: error.details[0].message });
         }
 
-         // if both are provided, we return a message
-         if (value.discountPrice && value.discountPercentage) {
+        // if both are provided, we return a message
+        if (value.discountPrice && value.discountPercentage) {
             return res.status(400).json({ message: 'Please provide either discount or discounted price, not both' });
         }
 
@@ -105,7 +101,7 @@ export const updateProducts = async (req, res, next) => {
         }
         // if none is provided, it means there's no discount so maintain price 
         if (!value.discountPrice && !value.discountPercentage) {
-            value.discountPrice = undefined;  
+            value.discountPrice = undefined;
         }
 
         const products = await productModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -129,12 +125,12 @@ export const deleteProducts = async (req, res, next) => {
 // count number of products. 
 export const countProducts = async (req, res, next) => {
     try {
-        
-        // not sure why the filter tho
-        const {filter = "{}"} = req.query;
 
-        const count  = await productModel.countDocuments(JSON.parse(filter))
-        res.json({count});
+        // not sure why the filter tho
+        const { filter = "{}" } = req.query;
+
+        const count = await productModel.countDocuments(JSON.parse(filter))
+        res.json({ count });
 
     } catch (error) {
         next(error)
