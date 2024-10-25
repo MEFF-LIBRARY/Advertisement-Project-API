@@ -114,7 +114,15 @@ export const updateProducts = async (req, res, next) => {
 export const deleteProducts = async (req, res, next) => {
     try {
 
-        const products = await productModel.findByIdAndDelete(req.params.id, req.body)
+        const products = await productModel.findOneAndDelete(
+            {
+                _id: req.params.id,
+                user: req.auth.id
+            }
+        );
+        if(!products) {
+            return res.status(404).json("Advert not found!")
+        }
         res.status(200).json(`Product: ${products.productName} has been deleted successfully`)
 
     } catch (error) {
